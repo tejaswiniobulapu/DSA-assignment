@@ -1,0 +1,85 @@
+#​include​ ​<​stdio.h​>​
+#​include​ ​<​stdlib.h​>​
+​struct​ node {
+​int​ data;
+​struct​ node* left;
+​struct​ node* right;
+};
+​struct​ node *​newNode​(​int​ item) 
+{ 
+​struct​ node *temp =  (​struct​ node *)​malloc​(​sizeof​(​struct​ node)); 
+temp->​data​ = item; 
+temp->​left​ = temp->​right​ = ​NULL​; 
+​return​ temp; 
+} 
+​struct​ node* ​insert​(​struct​ node *node, ​int​ value) 
+{ 
+​if​ (node == ​NULL​) ​return​ ​newNode​(value); 
+​if​ (value < node->​data​) 
+node->​left​  = ​insert​(node->​left​, value); 
+​else​ ​if​ (value > node->​data​) 
+node->​right​ = ​insert​(node->​right​, value);    
+​return​ node; 
+} 
+​struct​ node * ​minValueNode​(​struct​ node* node) 
+{ 
+​struct​ node* current = node; 
+​while​ (current && current->​left​ != ​NULL​) 
+current = current->​left​; 
+​return​ current; 
+} 
+​struct​ node* ​deleteNode​(​struct​ node* root, ​int​ data) 
+{ 
+​if​ (root == ​NULL​) ​return​ root; 
+​if​ (data < root->​data​) 
+root->​left​ = ​deleteNode​(root->​left​, data); 
+​else​ ​if​ (data > root->​data​) 
+root->​right​ = ​deleteNode​(root->​right​, data); 
+​else​
+{ 
+​if​ (root->​left​ == ​NULL​) 
+{ 
+​struct​ node *temp = root->​right​; 
+​free​(root); 
+​return​ temp; 
+} 
+​else​ ​if​ (root->​right​ == ​NULL​) 
+{ 
+​struct​ node *temp = root->​left​; 
+​free​(root); 
+​return​ temp; 
+} 
+​struct​ node* temp = ​minValueNode​(root->​right​);  
+root->​data​ = temp->​data​; 
+root->​right​ = ​deleteNode​(root->​right​, temp->​data​); 
+} 
+​return​ root; 
+}  
+​void​ ​inorder​(​struct​ node* root){
+​if​(root == ​NULL​) ​return​;
+​inorder​(root->​left​);
+​printf​(​"​%d​ ->​"​, root->​data​);
+​inorder​(root->​right​);
+}
+​void​ ​main​() 
+{ 
+​struct​ node *root = ​NULL​; 
+root = ​insert​(root, ​50​); 
+​insert​(root, ​1​); 
+​insert​(root, ​16​); 
+​insert​(root, ​22); 
+​insert​(root, ​23​); 
+​insert​(root, ​7​); 
+​insert​(root, ​86​);
+​insert​(root, ​255​);
+​insert​(root, ​252);
+​insert​(root, ​5);
+​insert​(root, ​72​);
+​printf​(​"​\n​BST before deleting 43,230,802​\n​"​);
+​inorder​(root);
+​deleteNode​(root,​22​);
+​deleteNode​(root,​23​);
+​deleteNode​(root,​86​);
+​printf​(​"​\n​BST after deletion​\n​"​);
+​inorder​(root);
+}
